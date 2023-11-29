@@ -1,1 +1,173 @@
-index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Three.js PointerLockControls</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="three/build/three.js"></script>
+    <script src="three/examples/js/controls/PointerLockControls.js"></script>
+
+    <script>
+      // Set up scene
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x0000ff); // Blue background
+      document.body.appendChild(renderer.domElement);
+
+
+      // Set up PointerLockControls
+      var controls = new THREE.PointerLockControls(camera, renderer.domElement);
+      scene.add(controls.getObject());
+
+      // Handle pointer lock change
+      var onPointerLockChange = function () {
+        if (document.pointerLockElement === renderer.domElement) {
+          controls.enabled = true;
+        } else {
+          controls.enabled = false;
+        }
+      };
+
+      // Handle pointer lock error
+      var onPointerLockError = function () {
+        console.error('Pointer Lock Error');
+      };
+
+      // Set up event listeners
+      document.addEventListener('pointerlockchange', onPointerLockChange);
+      document.addEventListener('pointerlockerror', onPointerLockError);
+      var counter = 0;
+started = false;
+      // Request pointer lock on click
+      function start() {
+        //var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+        if (started) {
+          if (counter < 170) {
+          counter+= 1.7;
+          setAngle(counter);
+          }
+        }
+      }
+      document.addEventListener('click', function () {
+        renderer.domElement.requestPointerLock();
+        started = true;
+        camera.rotation.x = 0;
+        camera.rotation.y = 0;
+        camera.rotation.z = 0;
+      });
+
+      // Handle mouse movement for rotating the cube
+      /*var onMouseMove = function (event) {
+        if (controls.enabled) {
+          var movementX =
+            event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+          cube.rotation.y -= movementX * 0.002;
+        }
+      };*/
+
+      //document.addEventListener('mousemove', onMouseMove);
+
+      // Set up camera position
+       // Create plane geometry
+       renderer.setPixelRatio(window.devicePixelRatio);
+
+       var page3Texture = new THREE.TextureLoader().load('page1.png');
+      var page1Texture = new THREE.TextureLoader().load('page2.png');
+      var page2Texture = new THREE.TextureLoader().load('page3.png');
+      var page4Texture = new THREE.TextureLoader().load('page4.png');
+      //page2Texture.magFilter = THREE.NearestFilter;
+
+      // Create plane geometry
+      var planeGeometry = new THREE.PlaneGeometry(5, 7);
+
+      // Create materials for front and back
+      var page1Material = new THREE.MeshBasicMaterial({ map: page1Texture });
+      var page2Material = new THREE.MeshBasicMaterial({ map: page2Texture });
+      var page3Material = new THREE.MeshBasicMaterial({ map: page3Texture });
+      var page4Material = new THREE.MeshBasicMaterial({ map: page4Texture});
+
+      // Create plane with front and back materials
+      var m1 = [page1Material,page2Material];
+
+      var planeMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ff00,
+        side: THREE.DoubleSide,
+      });
+      var planeMaterial2 = new THREE.MeshBasicMaterial({
+        color: 0x00ffff,
+        side: THREE.DoubleSide,
+      });
+      var plane1 = new THREE.Mesh(planeGeometry,page1Material);
+      var plane2 = new THREE.Mesh(planeGeometry,page2Material);
+      var plane3 = new THREE.Mesh(planeGeometry,page3Material);
+      var plane4 = new THREE.Mesh(planeGeometry,page4Material);
+
+      // Create first plane
+
+
+      // Create animation loop
+      var animate = function () {
+        requestAnimationFrame(animate);
+
+        // Render scene
+        renderer.render(scene, camera);
+      };
+
+      animate();
+
+      plane1.rotation.x = 0; // 45-degree rotation
+      scene.add(plane1);
+      scene.add(plane2);
+      plane3.position.z = -0.01;
+      scene.add(plane3);
+      //scene.add(plane4);
+
+      // Function to set the angle between planes
+      function setAngle(degrees) {
+        var radians = (degrees * Math.PI) / 180;
+        plane2.rotation.y = -radians;
+        plane2.position.x = -2.5+2.5*Math.cos(radians);
+        plane2.position.z = 2.5*Math.sin(radians);
+        plane3.rotation.y = Math.PI-radians;
+        plane3.position.x = -2.5+2.5*Math.cos(radians);
+        plane3.position.z = 2.5*Math.sin(radians);
+        camera.rotation.y += degrees/80000;
+      }
+
+      // Set up camera position
+      //camera.position.x = 5.7;
+//camera.position.y = 2.4;
+camera.position.x = -2.5
+camera.position.z = 5;
+
+      // Create animation loop
+      var animate = function () {
+        requestAnimationFrame(animate);
+
+        start();
+        // Render scene
+        renderer.render(scene, camera);
+      };
+
+      animate();
+    </script>
+  </body>
+</html>
