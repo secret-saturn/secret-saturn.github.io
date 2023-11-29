@@ -92,7 +92,6 @@ started = false;
        var page3Texture = new THREE.TextureLoader().load('page1.png');
       var page1Texture = new THREE.TextureLoader().load('page2.png');
       var page2Texture = new THREE.TextureLoader().load('page3.png');
-      var page4Texture = new THREE.TextureLoader().load('page4.png');
       //page2Texture.magFilter = THREE.NearestFilter;
 
       // Create plane geometry
@@ -102,7 +101,6 @@ started = false;
       var page1Material = new THREE.MeshBasicMaterial({ map: page1Texture });
       var page2Material = new THREE.MeshBasicMaterial({ map: page2Texture });
       var page3Material = new THREE.MeshBasicMaterial({ map: page3Texture });
-      var page4Material = new THREE.MeshBasicMaterial({ map: page4Texture});
 
       // Create plane with front and back materials
       var m1 = [page1Material,page2Material];
@@ -118,7 +116,6 @@ started = false;
       var plane1 = new THREE.Mesh(planeGeometry,page1Material);
       var plane2 = new THREE.Mesh(planeGeometry,page2Material);
       var plane3 = new THREE.Mesh(planeGeometry,page3Material);
-      var plane4 = new THREE.Mesh(planeGeometry,page4Material);
 
       // Create first plane
 
@@ -138,7 +135,6 @@ started = false;
       scene.add(plane2);
       plane3.position.z = -0.01;
       scene.add(plane3);
-      //scene.add(plane4);
 
       // Function to set the angle between planes
       function setAngle(degrees) {
